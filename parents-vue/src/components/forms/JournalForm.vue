@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import BaseModal from '../ui/BaseModal.vue'
+import AppDatePicker from '../ui/AppDatePicker.vue'
 import MoodFace from '../ui/MoodFace.vue'
 import { DIMS, MOODS } from '@/data/constants'
 import { todayStr, uid } from '@/lib/date'
@@ -78,7 +79,7 @@ function save() {
           </button>
         </div>
       </div>
-      <div class="field"><label>日期</label><input v-model="f.date" class="inp" type="date" /></div>
+      <div class="field"><label>日期</label><AppDatePicker v-model="f.date" /></div>
     </div>
 
     <label class="chk"><input v-model="f.first" type="checkbox" /> 这是一个「第一次」</label>

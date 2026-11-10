@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { ElConfigProvider } from 'element-plus/es/components/config-provider/index.mjs'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import AppSidebar from '@/components/layout/AppSidebar.vue'
 import WelcomeView from '@/views/WelcomeView.vue'
 import ToastHost from '@/components/ui/ToastHost.vue'
@@ -57,7 +59,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="app" :class="{ 'with-rail': hasRail }">
+  <ElConfigProvider :locale="zhCn">
+    <div class="app" :class="{ 'with-rail': hasRail }">
     <AppSidebar />
     <main class="main">
       <router-view v-slot="{ Component }">
@@ -74,11 +77,12 @@ onUnmounted(() => {
       </svg>
       {{ full ? '退出全屏' : '全屏' }}
     </button>
-  </div>
-  <WelcomeView v-if="!data.state.settings.onboarded" />
-  <ToastHost />
-  <ConfirmDialog />
-  <DialogHost />
+    </div>
+    <WelcomeView v-if="!data.state.settings.onboarded" />
+    <ToastHost />
+    <ConfirmDialog />
+    <DialogHost />
+  </ElConfigProvider>
 </template>
 
 <style scoped lang="scss">

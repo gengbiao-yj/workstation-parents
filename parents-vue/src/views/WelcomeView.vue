@@ -3,6 +3,7 @@ import { computed, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import Icon from '@/components/ui/Icon.vue'
 import MoodFace from '@/components/ui/MoodFace.vue'
+import AppDatePicker from '@/components/ui/AppDatePicker.vue'
 import { MOODS, STAGE, STAGES } from '@/data/constants'
 import { defaultState, demoState, setupKid } from '@/data/demo'
 import { adultAvatar, kidFigure } from '@/art/home'
@@ -233,7 +234,7 @@ function go() {
           </div>
           <div class="field">
             <label>生日</label>
-            <input v-model="W.kb" class="inp" type="date" />
+            <AppDatePicker v-model="W.kb" />
           </div>
           <div class="field">
             <label>身高（cm）</label>

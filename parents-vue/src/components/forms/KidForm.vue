@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive, watch } from 'vue'
 import BaseModal from '../ui/BaseModal.vue'
+import AppDatePicker from '../ui/AppDatePicker.vue'
 import Icon from '../ui/Icon.vue'
 import { KID_COLORS } from '@/data/constants'
 import { STAGES } from '@/data/constants'
@@ -130,7 +131,7 @@ async function del() {
           <button type="button" :class="{ on: d.gender === 'M' }" @click="d.gender = 'M'">男孩</button>
         </div>
       </div>
-      <div class="field"><label>生日</label><input v-model="d.birthday" class="inp" type="date" /></div>
+      <div class="field"><label>生日</label><AppDatePicker v-model="d.birthday" /></div>
     </div>
 
     <div class="row3">

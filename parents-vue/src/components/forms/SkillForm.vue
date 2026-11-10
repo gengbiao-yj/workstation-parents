@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import BaseModal from '../ui/BaseModal.vue'
+import AppDatePicker from '../ui/AppDatePicker.vue'
 import { DIMS, SKILL_PRESETS, skillPreset, type SkillPresetDef } from '@/data/constants'
 import { icon as artIcon } from '@/art/home'
 import { deepClone, todayStr, uid } from '@/lib/date'
@@ -125,7 +126,7 @@ function save() {
       </div>
       <div class="field">
         <label>开始日期</label>
-        <input v-model="d.start" class="inp" type="date" />
+        <AppDatePicker v-model="d.start" />
       </div>
     </div>
 

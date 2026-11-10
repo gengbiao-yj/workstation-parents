@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import BaseModal from '../ui/BaseModal.vue'
+import AppDatePicker from '../ui/AppDatePicker.vue'
 import Icon from '../ui/Icon.vue'
 import { CLOSE, REL } from '@/data/constants'
 import { REL_ORDER } from '@/art/net'
@@ -127,7 +128,7 @@ function openGreet() {
     <div class="row2">
       <div class="field">
         <label>生日</label>
-        <input v-model="bd" class="inp" type="date" />
+        <AppDatePicker v-model="bd" />
         <label class="chk" style="margin-top: 6px; font-size: 12px">
           <input v-model="noYear" type="checkbox" /> 不知道是哪一年出生
         </label>

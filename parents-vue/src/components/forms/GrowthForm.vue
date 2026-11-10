@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import BaseModal from '../ui/BaseModal.vue'
+import AppDatePicker from '../ui/AppDatePicker.vue'
 import { round1, todayStr, uid } from '@/lib/date'
 import { latestGrowth } from '@/lib/query'
 import { useData } from '@/stores/data'
@@ -47,7 +48,7 @@ function save() {
 <template>
   <BaseModal :title="title" @close="dialogs.close()">
     <div class="row2">
-      <div class="field"><label>日期</label><input v-model="f.date" class="inp" type="date" /></div>
+      <div class="field"><label>日期</label><AppDatePicker v-model="f.date" /></div>
       <div></div>
     </div>
     <div class="row2">

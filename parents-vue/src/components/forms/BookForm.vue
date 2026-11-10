@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
 import BaseModal from '../ui/BaseModal.vue'
+import AppDatePicker from '../ui/AppDatePicker.vue'
 import Icon from '../ui/Icon.vue'
 import { BOOK_COLORS } from '@/data/constants'
 import { deepClone, todayStr, uid } from '@/lib/date'
@@ -90,7 +91,7 @@ function del() {
     <div class="row2">
       <div class="field">
         <label>读完日期</label>
-        <input v-model="d.date" class="inp" type="date" />
+        <AppDatePicker v-model="d.date" />
       </div>
       <div class="field">
         <label>孩子打几颗星</label>

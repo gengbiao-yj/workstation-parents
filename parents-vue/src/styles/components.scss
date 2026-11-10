@@ -606,7 +606,8 @@
   left: 50%;
   bottom: 140px;
   transform: translateX(-50%);
-  z-index: 120;
+  /* 必须高于 element-plus 弹窗（2000 起），否则弹窗里的校验提示会被盖住 */
+  z-index: 2600;
   background: var(--ink);
   color: #fff;
   padding: 9px 16px;

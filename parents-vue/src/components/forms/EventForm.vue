@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
 import BaseModal from '../ui/BaseModal.vue'
+import AppDatePicker from '../ui/AppDatePicker.vue'
+import AppTimePicker from '../ui/AppTimePicker.vue'
 import Icon from '../ui/Icon.vue'
 import { EV_TYPES, OUT_LIST } from '@/data/constants'
 import { deepClone, fmtMD, todayStr, uid } from '@/lib/date'
@@ -169,7 +171,7 @@ async function del() {
       </div>
       <div class="field">
         <label>日期</label>
-        <input v-model="d.date" class="inp" type="date" />
+        <AppDatePicker v-model="d.date" />
       </div>
       <div class="field">
         <label>重复</label>
@@ -184,15 +186,15 @@ async function del() {
     <div class="row3">
       <div class="field">
         <label>开始</label>
-        <input v-model="d.start" class="inp num" type="time" />
+        <AppTimePicker v-model="d.start" num />
       </div>
       <div class="field">
         <label>结束</label>
-        <input v-model="d.endT" class="inp num" type="time" />
+        <AppTimePicker v-model="d.endT" num />
       </div>
       <div v-if="d.repeat !== 'none'" class="field">
         <label>重复到</label>
-        <input v-model="d.until" class="inp" type="date" />
+        <AppDatePicker v-model="d.until" />
         <div class="hint">不填就一直重复</div>
       </div>
     </div>
