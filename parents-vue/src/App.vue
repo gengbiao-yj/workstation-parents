@@ -9,9 +9,11 @@ import ToastHost from '@/components/ui/ToastHost.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import DialogHost from '@/components/forms/DialogHost.vue'
 import { useData } from '@/stores/data'
+import { useAuth } from '@/stores/auth'
 import { useUi } from '@/stores/ui'
 
 const data = useData()
+const auth = useAuth()
 const ui = useUi()
 const route = useRoute()
 
@@ -51,6 +53,10 @@ const onKey = (e: KeyboardEvent) => {
 onMounted(() => {
   ;['fullscreenchange', 'webkitfullscreenchange'].forEach((ev) => document.addEventListener(ev, syncFs))
   document.addEventListener('keydown', onKey)
+  // 已登录过就恢复登录态，并把云端数据接回来（未登录时什么都不做，仍是纯本地模式）
+  void (async () => {
+    if (await auth.restore()) await data.attach()
+  })()
 })
 onUnmounted(() => {
   ;['fullscreenchange', 'webkitfullscreenchange'].forEach((ev) => document.removeEventListener(ev, syncFs))

@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Icon from '@/components/ui/Icon.vue'
+import CloudSync from '@/components/account/CloudSync.vue'
 import { useData } from '@/stores/data'
 import { useDialogs } from '@/stores/dialogs'
 import { useUi } from '@/stores/ui'
@@ -19,6 +20,7 @@ const SECS: [string, string][] = [
   ['kids', '孩子'],
   ['ai', 'AI 接口'],
   ['data', '数据与备份'],
+  ['cloud', '云端同步'],
   ['about', '关于']
 ]
 const DEV_MAIL = 'cyberdaddyleo@outlook.com'
@@ -386,7 +388,7 @@ async function wipe() {
           <div class="panel set-sec">
             <div class="panel-title">数据与备份</div>
             <div class="panel-sub">
-              所有数据只保存在这台电脑的浏览器里，不会上传。清理浏览器数据、换电脑前，请先导出备份。
+              默认只保存在这台电脑的浏览器里；在「云端同步」登录后，记录同时存进自己的数据库，换设备也能接着记。清理浏览器数据、换电脑前，请先导出备份。
             </div>
             <div class="info-grid data-grid">
               <div class="k">当前数据</div>
@@ -424,6 +426,11 @@ async function wipe() {
               <button class="btn btn-light danger" @click="wipe"><Icon name="trash" :size="15" />清空全部数据</button>
             </div>
           </div>
+        </template>
+
+        <!-- 云端同步 -->
+        <template v-else-if="sec === 'cloud'">
+          <CloudSync />
         </template>
 
         <!-- 关于 -->

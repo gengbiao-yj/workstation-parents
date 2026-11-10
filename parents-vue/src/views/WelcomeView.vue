@@ -1,22 +1,47 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Icon from '@/components/ui/Icon.vue'
 import MoodFace from '@/components/ui/MoodFace.vue'
 import AppDatePicker from '@/components/ui/AppDatePicker.vue'
+import AccountForm from '@/components/account/AccountForm.vue'
 import { MOODS, STAGE, STAGES } from '@/data/constants'
 import { defaultState, demoState, setupKid } from '@/data/demo'
 import { adultAvatar, kidFigure } from '@/art/home'
 import { brandMark } from '@/lib/avatar'
 import { todayStr, uid } from '@/lib/date'
 import { round1 } from '@/lib/date'
-import { useData } from '@/stores/data'
+import { useAuth } from '@/stores/auth'
+import { useData, type AttachResult } from '@/stores/data'
 import { useUi } from '@/stores/ui'
 import type { Kid } from '@/types'
 
 const data = useData()
+const auth = useAuth()
 const ui = useUi()
 const router = useRouter()
+
+/** 已有账号的用户（换电脑 / 清空过浏览器数据）从这里把云端记录接回来 */
+const loginOpen = ref(false)
+
+async function onLoginDone(result: AttachResult) {
+  if (result === 'pulled') {
+    loginOpen.value = false
+    ui.toast('已从云端载入记录')
+    router.push('/home')
+    return
+  }
+  if (result === 'pushed') {
+    loginOpen.value = false
+    router.push('/home')
+    return
+  }
+  if (result === 'empty') {
+    loginOpen.value = false
+    ui.toast('登录成功，这个账号还没有记录，按下面的步骤开始就好', 2600)
+  }
+  // fail 保持弹窗，AccountForm 已经在内部给出提示
+}
 
 const W = reactive({
   step: 1,
@@ -189,6 +214,15 @@ function go() {
             <b>先看看示例</b>按你选的阶段生成一个虚拟的两孩家庭，随时可以清空
           </button>
         </div>
+        <div class="w-restore">
+          <button class="btn btn-ghost btn-sm" @click="loginOpen = true">
+            <Icon name="refresh" :size="14" />已有账号，登录载入云端记录
+          </button>
+          <span v-if="auth.lastUser" class="muted">
+            这台电脑之前用过账号 <b>{{ auth.lastUser }}</b>，登录后云端记录会覆盖这里的空白数据
+          </span>
+          <span v-else class="muted">换过电脑、或清空过浏览器数据？登录就能把记录接回来</span>
+        </div>
         <div class="w-nav">
           <button class="btn btn-dark w-go" @click="next">下一步</button>
         </div>
@@ -280,9 +314,25 @@ function go() {
       </template>
 
       <div class="muted foot-note">
-        <Icon name="lock" :size="12" /> 所有数据只保存在这台电脑的浏览器里
+        <Icon name="lock" :size="12" /> 不登录时数据只存在这台电脑的浏览器里；登录后会同步到自己的数据库
       </div>
       <div class="sign">Developed by @沐沐宝贝</div>
+    </div>
+
+    <!-- 登录弹窗：清空浏览器数据后从云端找回记录 -->
+    <div v-if="loginOpen" class="w-mask" @click.self="loginOpen = false">
+      <div class="w-modal">
+        <div class="w-modal-head">
+          <b>登录已有账号</b>
+          <button class="w-x" aria-label="关闭" @click="loginOpen = false">
+            <Icon name="x" :size="16" />
+          </button>
+        </div>
+        <p class="muted w-modal-sub">
+          登录后会用云端的记录替换这台电脑上的数据，并直接进入工作台。忘记账号的话，可以在原来那台设备上「设置 → 数据与备份」导出文件再导入。
+        </p>
+        <AccountForm tip="" autofocus @done="onLoginDone" />
+      </div>
     </div>
   </div>
 </template>
@@ -502,6 +552,65 @@ p.lead {
   padding-top: 22px;
   font-size: 11px;
   color: var(--ink3);
+}
+.w-restore {
+  margin: 20px auto 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  b {
+    color: var(--ink);
+    font-weight: 700;
+  }
+}
+.w-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(38, 38, 36, 0.34);
+  backdrop-filter: blur(2px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.w-modal {
+  width: 100%;
+  max-width: 560px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 22px 24px 24px;
+  text-align: left;
+  box-shadow: 0 18px 48px rgba(30, 30, 28, 0.18);
+}
+.w-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  b {
+    font-weight: 800;
+  }
+}
+.w-modal-sub {
+  font-size: 12.5px;
+  line-height: 1.7;
+  margin: 8px 0 16px;
+}
+.w-x {
+  border: 0;
+  background: transparent;
+  color: var(--ink3);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--ink);
+  }
 }
 @media (max-width: 760px) {
   .stage-cards {
