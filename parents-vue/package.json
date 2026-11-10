@@ -1,0 +1,33 @@
+{
+  "name": "workstation-parents-vue",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "学生家长工作台 · Vue 3 + Vite + TypeScript 复刻版",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "pinia": "^2.2.6",
+    "vue": "^3.5.13",
+    "vue-router": "^4.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "sass": "^1.83.0",
+    "typescript": "~5.6.3",
+    "vite": "^6.0.5",
+    "vue-tsc": "^2.1.10"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "@parcel/watcher",
+      "vue-demi"
+    ]
+  }
+}

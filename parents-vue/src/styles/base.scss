@@ -1,0 +1,194 @@
+@use './tokens' as *;
+
+:root {
+  --bg: #{$bg};
+  --side: #{$side};
+  --panel: #{$panel};
+  --ink: #{$ink};
+  --ink2: #{$ink2};
+  --ink3: #{$ink3};
+  --line: #{$line};
+  --line2: #{$line2};
+  --fill: #{$fill};
+  --fill2: #{$fill2};
+  --blue: #{$blue};
+  --blue-soft: #{$blue-soft};
+  --red: #{$red};
+  --red-soft: #{$red-soft};
+  --amber: #{$amber};
+  --amber-soft: #{$amber-soft};
+  --green: #{$green};
+  --green-soft: #{$green-soft};
+  --tag-bg: #{$tag-bg};
+  --tag-ink: #{$tag-ink};
+  --r-xl: #{$r-xl};
+  --r-lg: #{$r-lg};
+  --r-md: #{$r-md};
+  --r-sm: #{$r-sm};
+  --sh-card: #{$sh-card};
+  --sh-pop: #{$sh-pop};
+  --font: #{$font};
+  --num: #{$num};
+  --side-w: #{$side-w};
+  --rail-w: #{$rail-w};
+  --de: #{$de};
+  --zhi: #{$zhi};
+  --ti: #{$ti};
+  --mei: #{$mei};
+  --lao: #{$lao};
+  --bd: #{$bd};
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: none;
+  padding: 0;
+}
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: #d6e6fd;
+}
+
+svg {
+  display: block;
+}
+
+.num {
+  font-family: var(--num);
+  font-variant-numeric: tabular-nums;
+}
+.muted {
+  color: var(--ink3);
+}
+.sub {
+  color: var(--ink2);
+}
+.hide {
+  display: none !important;
+}
+.up {
+  color: var(--green);
+}
+.dn {
+  color: var(--red);
+}
+
+svg.ava {
+  border-radius: 50%;
+  overflow: hidden;
+}
+.ava .t-arm {
+  display: none;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes mpop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+@keyframes slide {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes floatUp {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
