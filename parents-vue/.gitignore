@@ -23,3 +23,7 @@ yarn-error.log*
 # 缓存
 .cache/
 *.tsbuildinfo
+
+# 测试打包产物
+.tmp-sync/
+.tmp-store/
