@@ -1013,6 +1013,39 @@
     color: var(--ink);
   }
 }
+/* 步骤区顶部：左侧说明 + 右侧「补记时间」按钮 */
+/* 步骤区顶部：左侧说明 / 顺序提示 + 右侧「补记时间」按钮 */
+.st-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0 10px;
+  .hint {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--ink3);
+    svg {
+      flex: none;
+    }
+    &.warn {
+      color: var(--amber);
+    }
+  }
+  .btn {
+    flex: none;
+  }
+}
+/* 行内日期框（单步编辑 / 补记模式） */
+.st-pick {
+  margin-top: 5px;
+  max-width: 200px;
+}
+
 .steps-tl {
   position: relative;
   padding-left: 30px;
@@ -1067,6 +1100,44 @@
       font-size: 12px;
       color: var(--ink3);
     }
+  }
+  /* 完成日期：平时是灰字，hover 行时浮出铅笔，点一下变日期框 */
+  .st-date-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: -4px;
+    padding: 1px 5px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    .pen {
+      flex: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    &:hover {
+      background: var(--fill);
+      color: var(--ink);
+      .pen {
+        opacity: 1;
+      }
+    }
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 1px;
+      .pen {
+        opacity: 0.8;
+      }
+    }
+  }
+  &:hover .st-date-btn .pen {
+    opacity: 0.8;
   }
   &.done .t {
     color: var(--ink2);

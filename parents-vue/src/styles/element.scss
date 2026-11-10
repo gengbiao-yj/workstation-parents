@@ -214,6 +214,25 @@
     background: var(--fill);
     opacity: 0.6;
   }
+
+  // 小号：技能步骤行内改完成时间（SkillOpen 的 .st-pick）
+  &.is-sm {
+    .el-input__wrapper {
+      height: 30px;
+      border-radius: 8px;
+      padding: 0 8px;
+    }
+    .el-input__inner {
+      height: 30px;
+      line-height: 30px;
+      font-size: 12.5px;
+    }
+    .el-input__icon {
+      height: 30px;
+      line-height: 30px;
+      font-size: 13px;
+    }
+  }
 }
 
 // ------------------------------------------------------------
