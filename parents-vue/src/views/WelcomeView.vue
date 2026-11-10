@@ -282,7 +282,7 @@ function go() {
       <div class="muted foot-note">
         <Icon name="lock" :size="12" /> 所有数据只保存在这台电脑的浏览器里
       </div>
-      <div class="sign">Developed by @赛博老爸</div>
+      <div class="sign">Developed by @沐沐宝贝</div>
     </div>
   </div>
 </template>

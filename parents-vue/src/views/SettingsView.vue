@@ -449,7 +449,7 @@ async function wipe() {
               <b>开发者</b>
               <div class="info-grid dev-grid">
                 <div class="k">全网渠道</div>
-                <div>@赛博老爸</div>
+                <div>@沐沐宝贝</div>
                 <div class="k">商用版 / 合作开发</div>
                 <div class="dev-mail">
                   <a :href="'mailto:' + DEV_MAIL">{{ DEV_MAIL }}</a>
@@ -457,7 +457,7 @@ async function wipe() {
                 </div>
               </div>
             </div>
-            <div class="sign">Developed by @赛博老爸</div>
+            <div class="sign">Developed by @沐沐宝贝</div>
           </div>
         </template>
       </div>

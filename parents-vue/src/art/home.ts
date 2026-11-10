@@ -644,7 +644,7 @@ export function home(d: any): HomeScene {
   });
   s += '</g>';
   s += nightLayer(tod);
-  s += txt(W - WT - 10, H - 3.5, 'Developed by @赛博老爸', { 'class': 'wm', 'text-anchor': 'end' });
+  s += txt(W - WT - 10, H - 3.5, 'Developed by @沐沐宝贝', { 'class': 'wm', 'text-anchor': 'end' });
   s += '<g class="fx-layer"></g></svg>';
   return { svg: s, W: W, H: H, rooms: ROOMS };
 }

@@ -28,10 +28,10 @@ export function netSVG(k: Kid, ps: Person[], hex: string): string {
   s += `<svg class="net-svg" viewBox="0 0 ${W} ${H}">`
   s += `<defs><radialGradient id="nBg"><stop offset="0" stop-color="${hex}" stop-opacity=".10"/><stop offset="1" stop-color="${hex}" stop-opacity="0"/></radialGradient></defs>`
   s += `<circle cx="${cx}" cy="${cy}" r="300" fill="url(#nBg)"/>`
-  ;[3, 2, 1].forEach((c) => {
-    s += `<circle cx="${cx}" cy="${cy}" r="${R[c]}" fill="none" stroke="#e8e8e5" stroke-dasharray="${c === 3 ? '0' : '4 6'}"/>`
-    s += `<text x="${cx}" y="${cy - R[c] - 6}" text-anchor="middle" font-size="11" fill="#b0b0ad">${CLOSE[c]}</text>`
-  })
+    ;[3, 2, 1].forEach((c) => {
+      s += `<circle cx="${cx}" cy="${cy}" r="${R[c]}" fill="none" stroke="#e8e8e5" stroke-dasharray="${c === 3 ? '0' : '4 6'}"/>`
+      s += `<text x="${cx}" y="${cy - R[c] - 6}" text-anchor="middle" font-size="11" fill="#b0b0ad">${CLOSE[c]}</text>`
+    })
 
   const groups = REL_ORDER.map((r) => ({
     r,
@@ -161,7 +161,7 @@ export function netSVG(k: Kid, ps: Person[], hex: string): string {
   if (!ps.length) {
     s += `<text x="${cx}" y="${cy + 130}" text-anchor="middle" font-size="13" fill="#9a9a97">点右上角「添加」，把家人和朋友放进来</text>`
   }
-  s += `<text x="${W - 8}" y="${H - 6}" text-anchor="end" font-size="9.5" fill="#c4c4c1">Developed by @赛博老爸</text>`
+  s += `<text x="${W - 8}" y="${H - 6}" text-anchor="end" font-size="9.5" fill="#c4c4c1">Developed by @沐沐宝贝</text>`
   return s + '</svg>'
 }
 
