@@ -20,7 +20,14 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    open: false
+    open: false,
+    // 开发时把 /api 转发到 NestJS，前端代码里统一用相对路径，免去跨域与端口配置
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true
+      }
+    }
   },
   build: {
     // element-plus 的日期/时间面板体积较大，单独拆一个 chunk，主包与缓存都更友好
