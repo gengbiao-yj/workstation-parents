@@ -1,7 +1,13 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
+
+// 兼容旧链接：#/skills 这类老书签在 router 初始化前改写成 /skills，
+// 否则 createWebHistory 会把它当成根路径，用户会莫名回到首页。
+if (typeof location !== 'undefined' && location.hash.startsWith('#/')) {
+  history.replaceState(null, '', location.hash.slice(1) + location.search)
+}
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/', redirect: '/home' },
     { path: '/home', name: 'home', component: () => import('@/views/HomeView.vue'), meta: { rail: true } },

@@ -4,7 +4,9 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
-  base: './',
+  // history 路由下资源必须用绝对路径：/skills 刷新时若仍按 './' 解析会 404。
+  // 需要部署到子目录时用 VITE_BASE=/sub/ pnpm build 覆盖。
+  base: process.env.VITE_BASE || '/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

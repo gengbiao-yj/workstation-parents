@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import NeedKid from '@/components/ui/NeedKid.vue'
 import OccRow from '@/components/ui/OccRow.vue'
 import Icon from '@/components/ui/Icon.vue'
@@ -19,6 +19,7 @@ const data = useData()
 const dialogs = useDialogs()
 const ui = useUi()
 const route = useRoute()
+const router = useRouter()
 
 const t = todayStr()
 const month = ref(t.slice(0, 7))
@@ -149,7 +150,7 @@ function newEvent(preset: Record<string, any> = {}) {
 
 function openOcc(o: Occurrence) {
   if (o.ev) dialogs.open({ k: 'event', ev: o.ev, ds: o.ds })
-  else if (o.bday) window.location.hash = '#/people'
+  else if (o.bday) router.push('/people')
 }
 
 function toggleOcc(o: Occurrence) {
