@@ -17,7 +17,20 @@ systemctl enable --now docker
 docker --version && docker compose version
 ```
 
-> 顺手加个 swap，2G 内存以下的机器上跑构建会稳很多：`fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile`
+### 加 2G swap（2G 内存的机器必做）
+
+云服务器默认不开 swap。2G 内存下跑一次镜像构建时，`tsc` 编译峰值能到 700M–1G，而 MySQL 此时已占 400M，很容易顶到天花板被 OOM kill。先补一块 swap 兜底：
+
+```bash
+fallocate -l 2G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo '/swapfile none swap sw 0 0' >> /etc/fstab   # 重启后自动挂载
+free -h                                            # 确认 Swap 行显示 2.0Gi
+```
+
+> swap 保护的是宿主机和构建过程。容器里的 `mem_limit` 是硬限制，**不会被 swap 兜住** —— 所以 `docker-compose.yml` 的内存上限也要按机器规格配对，见第 5 节。
 
 ---
 
@@ -97,13 +110,20 @@ grep -c '^.$' .env   # 确认三个值都填上了
 
 ## 5. 启动
 
+**分两步，不要用 `docker compose up -d --build` 一把梭。** 那样构建和 MySQL 启动可能重叠，2G 机器上编译峰值叠上 MySQL 的 400M 容易触发 OOM（表现为 `api` 反复重启、`docker inspect` 里 `ExitCode` 是 137）。
+
 ```bash
 cd /opt/parents
-docker compose up -d --build
+
+# 第一步：单独编译 api 镜像，此时只有系统在跑，不和 MySQL 抢内存
+docker compose build api
+
+# 第二步：启动全部容器
+docker compose up -d
 docker compose ps
 ```
 
-预期 `db` 先健康、`api` 再起来，首次拉镜像 + 编译大约 2–4 分钟。跟一下日志：
+预期 `db` 先健康、`api` 再起来。首次拉镜像 + 编译，3M 带宽下约 3–6 分钟；`api` 首次启动还要等迁移跑完，**前 1–2 分钟内反复重启是正常的**，不要急着判断失败。跟一下日志：
 
 ```bash
 docker compose logs -f api
@@ -117,6 +137,19 @@ docker compose logs -f api
 [entrypoint] 启动 API ...
 [Nest] xxx LOG [Bootstrap] API 已启动 → http://localhost:3000/api
 ```
+
+### 内存上限怎么配对
+
+三个 `mem_limit` 之和不要超过物理内存的 80%，给系统和 Docker daemon 留空间：
+
+| 机器规格 | db | api | web | 合计 |
+|---|---|---|---|---|
+| **2G（当前配置）** | 768m | 512m | 128m | 1.4G |
+| 4G 及以上 | 1g | 512m | 128m | 1.6G |
+
+`db` 的 768m 是按 `innodb-buffer-pool-size=256M` + 连接/临时表开销算的，实际常驻 350–450M，余量充足。
+
+**`api` 的 512m 不建议再往下压。** Node 22 的堆和 V8 预留需要空间，整库导入那种大 body 时压到 384m 容易被 OOM kill。
 
 ---
 
@@ -195,7 +228,8 @@ gunzip -c backups/workstation_parents-20261112-030000.sql.gz | \
 cd /opt/parents
 ./backup.sh                       # 先备份
 # 重新上传 api/ 和 web/
-docker compose up -d --build      # 只会重建有变化的镜像
+docker compose build api          # 先编译，避开与 MySQL 抢内存
+docker compose up -d              # 只会重建有变化的容器
 ```
 
 迁移会在容器启动时自动执行，不需要手动跑。
@@ -211,6 +245,8 @@ docker compose up -d --build      # 只会重建有变化的镜像
 | 所有接口 **404** | `proxy_pass` 结尾多写了 `/`，把 `/api` 前缀剥掉了 | 改成 `proxy_pass http://api:3000;` |
 | **502** Bad Gateway | api 容器没起来 | `docker compose logs api`，多半是数据库连不上或迁移失败 |
 | api 反复重启，日志停在「等待 MySQL」 | `.env` 里 `DB_PASS` 与库里不一致 | 用 root 进库 `ALTER USER 'parents_app'@'%' IDENTIFIED BY '新密码';` |
+| api 反复重启，`docker inspect` 显示 **ExitCode 137** | 内存不足被 OOM kill（构建与 MySQL 抢内存） | 先 `docker compose build api` 再 `up -d`；确认已加 swap；核对第 5 节的上限配对 |
+| 构建时整机卡死、SSH 掉线 | 2G 机器上编译峰值吃满内存 | 停库再构建：`docker compose stop db && docker compose build api && docker compose up -d` |
 | 页面能开但登录失败 | 改了 `JWT_SECRET`，旧 token 全部失效 | 重新登录即可，正常现象 |
 | 磁盘快满 | 备份堆积 / Docker 镜像层 | `du -sh /var/lib/docker`，`docker system prune -af` |
 

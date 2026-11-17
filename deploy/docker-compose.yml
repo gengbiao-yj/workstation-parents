@@ -28,7 +28,10 @@ services:
       timeout: 5s
       retries: 20
       start_period: 60s
-    mem_limit: 1g
+    # 2G 机器：768m(db) + 512m(api) + 128m(web) = 1.4G，留 600M 给系统
+    # buffer pool 固定 256M，实际常驻 350-450M，768m 余量充足
+    # 若换成 4G 及以上机器，可调回 1g
+    mem_limit: 768m
     # 端口不对外暴露：只有 api 容器能通过内部网络访问 3306
 
   api:
