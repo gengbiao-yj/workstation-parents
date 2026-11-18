@@ -22,6 +22,10 @@ services:
       TZ: Asia/Shanghai
     volumes:
       - db-data:/var/lib/mysql
+    # 只绑宿主机回环，供 Navicat 等工具经 SSH 隧道接入。
+    # 绝对不要写成 "3306:3306" —— 那会监听 0.0.0.0，等于把数据库暴露到公网。
+    ports:
+      - "127.0.0.1:3306:3306"
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
       interval: 10s
@@ -32,7 +36,8 @@ services:
     # buffer pool 固定 256M，实际常驻 350-450M，768m 余量充足
     # 若换成 4G 及以上机器，可调回 1g
     mem_limit: 768m
-    # 端口不对外暴露：只有 api 容器能通过内部网络访问 3306
+    # 3306 只监听宿主机 127.0.0.1（上面那条），公网直连不通，
+    # 必须经 SSH 隧道访问：Navicat 的 SSH 页签连服务器，MySQL 主机填 127.0.0.1
 
   api:
     build: ./api
